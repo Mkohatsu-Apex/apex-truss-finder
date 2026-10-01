@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Apex Truss Finder - Test Job</title>
+<style>
+body{font-family:Arial,sans-serif;margin:0;background:#f4f6f8;color:#142033}
+header{background:#142033;color:white;padding:18px} header b{font-size:22px}
+main{max-width:900px;margin:auto;padding:16px}.card{background:white;border:1px solid #ccd3dc;border-radius:14px;padding:16px;margin-bottom:14px}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:end}label{font-weight:bold;font-size:14px}
+select,button{font-size:16px;padding:12px;border-radius:9px;border:1px solid #9aa7b5}button{background:#142033;color:white;font-weight:bold;cursor:pointer}
+svg{width:100%;height:auto;border:1px solid #ccd3dc;border-radius:10px;background:white}
+.truss{stroke:#627287;stroke-width:3;cursor:pointer}.truss.active{stroke:#e52525;stroke-width:10}.mark{font-weight:bold;font-size:14px}
+#result{font-size:18px;font-weight:bold;margin-top:12px}.note{font-size:13px;color:#56677a}
+</style>
+</head>
+<body>
+<header><b>APEX TRUSS FINDER</b><br><span>Small Field Test Job • TEST-001</span></header>
+<main>
+<div class="card">
+<div class="controls">
+<div><label for="mark">Truss mark</label><br><select id="mark"><option>H32A</option><option>H32B</option><option>H32C</option><option>H32D</option><option>H32E</option></select></div>
+<button id="find">FIND TRUSS</button><button id="clear">CLEAR</button>
+</div>
+<div id="result">Choose a truss, then tap FIND TRUSS.</div>
+<p class="note">QR-ready test: this file also accepts a URL such as <b>?truss=H32C</b> and automatically highlights that truss.</p>
+</div>
+<div class="card">
+<svg viewBox="0 0 700 500" aria-label="Interactive test roof layout">
+<path d="M100 70 H560 V180 H630 V410 H100 Z" fill="none" stroke="#27384b" stroke-width="5"/>
+<path d="M100 70 L270 235 L560 70 M270 235 L560 180 L630 180" fill="none" stroke="#8996a5" stroke-width="3"/>
+<g id="trusses">
+<line class="truss" data-mark="H32A" x1="100" y1="260" x2="560" y2="260"/><text class="mark" x="28" y="265">H32A</text>
+<line class="truss" data-mark="H32B" x1="100" y1="292" x2="560" y2="292"/><text class="mark" x="28" y="297">H32B</text>
+<line class="truss" data-mark="H32C" x1="100" y1="324" x2="560" y2="324"/><text class="mark" x="28" y="329">H32C</text>
+<line class="truss" data-mark="H32D" x1="100" y1="356" x2="560" y2="356"/><text class="mark" x="28" y="361">H32D</text>
+<line class="truss" data-mark="H32E" x1="100" y1="388" x2="560" y2="388"/><text class="mark" x="28" y="393">H32E</text>
+</g></svg>
+</div>
+</main>
+<script>
+const sel=document.getElementById('mark'), result=document.getElementById('result');
+function show(m){document.querySelectorAll('.truss').forEach(x=>x.classList.toggle('active',x.dataset.mark===m));sel.value=m;result.textContent=m+' FOUND — highlighted in red on the layout.'}
+document.getElementById('find').onclick=()=>show(sel.value);
+document.getElementById('clear').onclick=()=>{document.querySelectorAll('.truss').forEach(x=>x.classList.remove('active'));result.textContent='Choose a truss, then tap FIND TRUSS.'};
+document.querySelectorAll('.truss').forEach(x=>x.onclick=()=>show(x.dataset.mark));
+const q=new URLSearchParams(location.search).get('truss');if(q&&['H32A','H32B','H32C','H32D','H32E'].includes(q.toUpperCase()))show(q.toUpperCase());
+</script>
+</body></html>
